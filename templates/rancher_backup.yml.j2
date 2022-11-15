@@ -1,0 +1,18 @@
+kind: Backup
+metadata:
+  name: s3-recurring-backup
+  namespace: cattle-resources-system
+spec:
+  storageLocation:
+    s3:
+      credentialSecretName: "s3-creds"
+      credentialSecretNamespace: "{{ helm_rancher_backup_release_namespace }}"
+      bucketName: "{{ rancher_backup_bucket_name }}"
+      folder: "{{ rancher_backup_folder }}"
+      region: "{{ rancher_backup_region }}"
+      endpoint: "{{ rancher_backup_endpoint }}"
+      endpointCA: "{{ rancher_backup_endpointCA }}"
+  resourceSetName: "rancher-resource-set"
+  encryptionConfigSecretName: "{{ 'encryptionconfig' if rancher_backup_encryption_config_secretbox else '' }}"
+  schedule: "{{ rancher_backup_schedule }}"
+  retentionCount: {{ rancher_backup_retentioncount }}

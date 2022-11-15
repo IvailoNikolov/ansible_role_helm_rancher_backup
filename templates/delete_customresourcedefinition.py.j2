@@ -1,0 +1,66 @@
+from kubernetes import client, config
+import yaml
+
+# Define exclude group variable
+yaml_exclude_group = """
+group: {{ exclude_group | to_yaml }}
+"""
+exclude = yaml.safe_load(yaml_exclude_group)
+
+
+# Load kubernetes API
+config.load_kube_config()
+api_cdr = client.ApiextensionsV1Api()
+api_co  = client.CustomObjectsApi()
+
+# get all CDRs
+cdrs = api_cdr.list_custom_resource_definition(pretty=True)
+
+def match_exclude( match, exclude):
+    result = False
+
+    for item in exclude:
+        if item in match:
+            result = True
+
+    return result
+
+
+for cdr in cdrs.items:
+
+    cdr_group      = cdr.spec.group
+    cdr_plural     = cdr.spec.names.plural
+    cdr_name       = cdr.metadata.name
+
+    # Apply exclusion
+    if  match_exclude( cdr_group, exclude.get('group')):
+        continue
+
+
+    for cdr_version in cdr.spec.versions:
+        cdr_version_name    = cdr_version.name
+        
+        # find all Custom object
+        try:
+            cos = api_co.list_cluster_custom_object(cdr_group, cdr_version_name, cdr_plural, pretty=True)
+
+            for co in cos['items']:
+                co_name         = co.get('metadata',{}).get('name','')
+                co_namespace    = co.get('metadata',{}).get('namespace', '')
+
+                # delete Custom Object
+                try:
+                    if co_namespace == '':
+                        api_co.delete_cluster_custom_object(cdr_group, cdr_version_name, cdr_plural, co_name)
+                    else:
+                        api_co.delete_namespaced_custom_object(cdr_group, cdr_version_name, co_namespace, cdr_plural, co_name)
+                except:
+                    print(f'deletion fail of CO {co_name} group: {cdr_group} plural: {cdr_plural} version:{cdr_version_name}')
+        except:
+            print('no ressource')
+
+    # Delete Custom Resource Definition
+    try:
+        api_cdr.delete_custom_resource_definition(cdr_name)
+    except:
+        print(f'deletion fail of CDR {cdr_name}')

@@ -1,0 +1,15 @@
+---
+
+- name: Restore Rancher from backup
+  kubernetes.core.k8s:
+    state: absent
+    template:
+      - path: '../templates/rancher_restore.yml.j2'
+
+- name: Remove an bootstrap secret 
+  kubernetes.core.k8s:
+    state: absent
+    api_version: v1
+    kind: Secret
+    namespace: testing
+    name: bootstrap-secret

@@ -1,0 +1,21 @@
+from kubernetes import client, config
+import yaml
+
+# Define exclude namespaces variable
+yaml_exclude_namespaces = """
+namespaces: {{ exclude_namespace | to_yaml }}
+"""
+exclude = yaml.safe_load(yaml_exclude_namespaces)
+
+# Load kubernetes namespace
+config.load_kube_config()
+api = client.CoreV1Api()
+namespaces = api.list_namespace()
+namespaces_to_delete = [ x.metadata.name for x in response.items if x.metadata.name not in exclude.get('namespaces') ]
+
+def list_depl
+
+#delete namespace
+for namespace in namespaces_to_delete:
+    api.delete_namespace(namespace)
+

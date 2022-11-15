@@ -1,0 +1,13 @@
+---
+- name: configure Rancher backup s3
+  kubernetes.core.k8s:
+    state: present
+    template:
+      - path: '../templates/rancher_s3_secret.yml.j2'
+
+- name: configure Rancher backup encryption
+  kubernetes.core.k8s:
+    state: present
+    template:
+      - path: '../templates/rancher_encryption.yml.j2'
+  when: (rancher_backup_encryption_config_secretbox is defined) and (rancher_backup_encryption_config_secretbox|length > 0)

@@ -1,0 +1,28 @@
+---
+
+- name: Clean potential previous rancher restore statement
+  kubernetes.core.k8s:
+    state: absent
+    template:
+      - path: '../templates/rancher_restore.yml.j2'
+
+- name: Restore Rancher from backup
+  kubernetes.core.k8s:
+    state: present
+    template:
+      - path: '../templates/rancher_restore.yml.j2'
+    wait: yes
+    wait_condition:
+      status: "True"
+      type: Ready
+    wait_sleep: 5
+    wait_timeout: 600
+
+
+- name: Remove an bootstrap secret 
+  kubernetes.core.k8s:
+    state: absent
+    api_version: v1
+    kind: Secret
+    namespace: "{{ helm_rancher_backup_release_namespace }}"
+    name: bootstrap-secret

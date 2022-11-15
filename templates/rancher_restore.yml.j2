@@ -1,0 +1,18 @@
+apiVersion: resources.cattle.io/v1
+kind: Restore
+metadata:
+  name: restore-migration
+  namespace: "{{ helm_rancher_backup_release_namespace }}"
+spec:
+  backupFilename: "{{ rancher_backup_filename }}"
+  prune: false
+  encryptionConfigSecretName: "{{ 'encryptionconfig' if rancher_backup_encryption_config_secretbox else '' }}"
+  storageLocation:
+    s3:
+      credentialSecretName: "s3-creds"
+      credentialSecretNamespace: "{{ helm_rancher_backup_release_namespace }}"
+      bucketName: "{{ rancher_backup_bucket_name }}"
+      folder: "{{ rancher_backup_folder }}"
+      region: "{{ rancher_backup_region }}"
+      endpoint: "{{ rancher_backup_endpoint }}"
+      endpointCA: "{{ rancher_backup_endpointCA }}"

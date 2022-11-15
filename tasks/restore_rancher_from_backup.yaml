@@ -1,0 +1,39 @@
+---
+
+- name: check if rancher has allready backup this file
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Restore
+    name: restore-migration
+    namespace: cattle-resources-system
+  register: existing_restore
+
+- name: Setting host facts using complex arguments
+  set_fact:
+    has_restore: "{{existing_restore['resources']|length}}"
+
+- name: Setting host facts using complex arguments
+  when: has_restore != '0'
+  set_fact:
+    restored_filename: "{{ existing_restore['resources'][0]['spec']['backupFilename']|default(False) }}"
+
+- name: Restore Rancher from backup if failed remove rancher footprint
+  block:
+    - name: Restore rancher
+      import_tasks: start_rancher_restore.yaml
+  rescue:
+    - name: cancel restore
+      import_tasks: stop_rancher_restore.yaml
+    - name: Remove rancher helm install
+      import_tasks: helm_remove.yaml
+    - name: Remove all rancher footprint
+      import_tasks: remove_rancher_footprint.yaml
+
+    - name: Restore Rancher from backup if failed cancel restore
+      block:
+        - name: Restore rancher
+          import_tasks: start_rancher_restore.yaml
+      rescue: 
+        - name: cancel restore
+          import_tasks: stop_rancher_restore.yaml
+  when: (rancher_backup_filename is defined) and (rancher_backup_filename|length > 0) and ( (has_restore == '0') or (restored_filename != rancher_backup_filename) )
