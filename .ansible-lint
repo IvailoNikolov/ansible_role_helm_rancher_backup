@@ -1,0 +1,6 @@
+skip_list:
+  - 'ignore-errors'
+  - 'no-changed-when'
+  - 'no-relative-paths'
+  - 'key-order[task]'
+  - 'yaml[line-length]'

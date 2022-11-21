@@ -1,5 +1,5 @@
 ---
-exclude_namespace: 
+exclude_namespace:
   - kube-system
   - nginx-ingress
   - cert-manager
@@ -16,10 +16,10 @@ helm_rancher_backup_chart_repo_url: "https://charts.rancher.io"
 helm_rancher_backup_chart_version: latest
 helm_rancher_backup_chart_ref: rancher-backup
 helm_rancher_backup_release_namespace: cattle-resources-system
-helm_rancher_backup_create_namespace: True
+helm_rancher_backup_create_namespace: true
 helm_rancher_backup_values: {}
 helm_rancher_backup_values_files: []
-helm_rancher_backup_wait: True
+helm_rancher_backup_wait: true
 helm_rancher_backup_disable_hook: "no"
 helm_rancher_backup_force: "no"
 helm_rancher_backup_atomic: "no"
@@ -31,13 +31,13 @@ helm_rancher_backup_kubeconfig: "~/.kube/config"
 helm_rancher_backup_validate_certs: "yes"
 
 rancher_backup_filename: ""
-rancher_backup_accessKey: ""
-rancher_backup_secretKey: ""
+rancher_backup_access_key: ""
+rancher_backup_secret_key: ""
 rancher_backup_bucket_name: ""
 rancher_backup_region: ""
 rancher_backup_folder: ""
 rancher_backup_endpoint: ""
-rancher_backup_endpointCA: ""
+rancher_backup_endpoint_ca: ""
 rancher_backup_encryption_config_secretbox: ""
 rancher_backup_schedule: ""
 rancher_backup_retentioncount: ""

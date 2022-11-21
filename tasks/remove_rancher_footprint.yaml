@@ -1,31 +1,37 @@
 ---
 - name: Get users homedir
-  command: echo ~
+  ansible.builtin.command: echo ~
   register: homedir
 
-- name : Copy script delete_customresourcedefinition
+- name: Copy script delete_customresourcedefinition
   ansible.builtin.template:
     src: '../templates/delete_customresourcedefinition.py.j2'
     dest: "{{ homedir.stdout }}/delete_customresourcedefinition.py"
+    owner: "root"
+    group: "root"
+    mode: 0700
 
-- name : Execute script delete_customresourcedefinition
-  command : '/usr/bin/python3 {{ homedir.stdout }}/delete_customresourcedefinition.py'
+- name: Execute script delete_customresourcedefinition
+  ansible.builtin.command: '/usr/bin/python3 {{ homedir.stdout }}/delete_customresourcedefinition.py'
   register: customresourcedefinition_list
-    
-- name: remove script delete_customresourcedefinition
+
+- name: Remove script delete_customresourcedefinition
   ansible.builtin.file:
     path: "{{ homedir.stdout }}/delete_customresourcedefinition.py"
     state: absent
 
-- name : Copy script delete_namespace
+- name: Copy script delete_namespace
   ansible.builtin.template:
     src: '../templates/delete_namespace.py.j2'
     dest: "{{ homedir.stdout }}/delete_namespace.py"
+    owner: "root"
+    group: "root"
+    mode: 0700
 
-- name : Execute script delete_namespace
-  command : '/usr/bin/python3 {{ homedir.stdout }}/delete_namespace.py'
+- name: Execute script delete_namespace
+  ansible.builtin.command: '/usr/bin/python3 {{ homedir.stdout }}/delete_namespace.py'
 
-- name: remove script delete_namespace
+- name: Remove script delete_namespace
   ansible.builtin.file:
     path: "{{ homedir.stdout }}/delete_namespace.py.py"
     state: absent

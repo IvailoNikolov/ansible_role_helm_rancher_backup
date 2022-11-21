@@ -11,15 +11,15 @@
     state: present
     template:
       - path: '../templates/rancher_restore.yml.j2'
-    wait: yes
+    wait: "yes"
     wait_condition:
-      status: "True"
+      status: true
       type: Ready
     wait_sleep: 5
     wait_timeout: 600
 
 
-- name: Remove an bootstrap secret 
+- name: Remove an bootstrap secret
   kubernetes.core.k8s:
     state: absent
     api_version: v1

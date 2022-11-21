@@ -6,7 +6,7 @@
     template:
       - path: '../templates/rancher_restore.yml.j2'
 
-- name: Remove an bootstrap secret 
+- name: Remove an bootstrap secret
   kubernetes.core.k8s:
     state: absent
     api_version: v1

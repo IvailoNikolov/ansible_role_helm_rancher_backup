@@ -1,5 +1,5 @@
 ---
-- name: configure Rancher backup policy
+- name: Configure Rancher backup policy
   kubernetes.core.k8s:
     state: present
     template:

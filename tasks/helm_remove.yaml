@@ -10,7 +10,7 @@
     context: "{{ helm_rancher_backup_context }}"
     kubeconfig: "{{ helm_rancher_backup_kubeconfig }}"
     validate_certs: "{{ helm_rancher_backup_validate_certs }}"
-  ignore_errors: True
+  ignore_errors: true
 
 - name: Remove rancher-backup-cdr chart
   kubernetes.core.helm:
@@ -22,7 +22,7 @@
     context: "{{ helm_rancher_backup_context }}"
     kubeconfig: "{{ helm_rancher_backup_kubeconfig }}"
     validate_certs: "{{ helm_rancher_backup_validate_certs }}"
-  ignore_errors: True
+  ignore_errors: true
 
 - name: List helm release secret
   kubernetes.core.k8s_info:
@@ -32,10 +32,10 @@
   register: secret_list
 
 - name: List of helm release secret
-  set_fact:
-    helm_release_secret_list: "{{ secret_list['resources'] | map(attribute='metadata')  | map(attribute='name') | map('regex_search','.*helm.*rancher-backup.*') | select('string') | list }}"
+  ansible.builtin.set_fact:
+    helm_release_secret_list: "{{ secret_list['resources'] | map(attribute='metadata') | map(attribute='name') | map('regex_search', '.*helm.*rancher-backup.*') | select('string') | list }}"
 
-- name: delete list release secret
+- name: Delete list release secret
   kubernetes.core.k8s:
     state: absent
     api_version: v1

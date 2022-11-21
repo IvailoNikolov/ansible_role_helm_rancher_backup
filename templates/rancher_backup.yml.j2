@@ -11,7 +11,7 @@ spec:
       folder: "{{ rancher_backup_folder }}"
       region: "{{ rancher_backup_region }}"
       endpoint: "{{ rancher_backup_endpoint }}"
-      endpointCA: "{{ rancher_backup_endpointCA }}"
+      endpointCA: "{{ rancher_backup_endpoint_ca }}"
   resourceSetName: "rancher-resource-set"
   encryptionConfigSecretName: "{{ 'encryptionconfig' if rancher_backup_encryption_config_secretbox else '' }}"
   schedule: "{{ rancher_backup_schedule }}"

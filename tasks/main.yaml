@@ -1,12 +1,12 @@
 ---
 - name: Deploy rancher_backup chart
-  import_tasks: install.yaml
+  ansible.builtin.import_tasks: install.yaml
 
-- name: configure backup s3 and encryption
-  import_tasks: configure_backup_s3_and_encryption.yaml
+- name: Configure backup s3 and encryption
+  ansible.builtin.import_tasks: configure_backup_s3_and_encryption.yaml
 
-- name: try to restore if configure rancher
-  import_tasks: restore_rancher_from_backup.yaml
+- name: Try to restore if configure rancher
+  ansible.builtin.import_tasks: restore_rancher_from_backup.yaml
 
-- name: configure backup policy
-  import_tasks: configure_backup_policy.yaml
+- name: Configure backup policy
+  ansible.builtin.import_tasks: configure_backup_policy.yaml
