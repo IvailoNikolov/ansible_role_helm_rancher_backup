@@ -4,7 +4,7 @@
   register: homedir
 
 - name: Copy script delete_customresourcedefinition
-  become: yes
+  become: true
   ansible.builtin.template:
     src: '../templates/delete_customresourcedefinition.py.j2'
     dest: "{{ homedir.stdout }}/delete_customresourcedefinition.py"
@@ -22,7 +22,7 @@
     state: absent
 
 - name: Copy script delete_namespace
-  become: yes
+  become: true
   ansible.builtin.template:
     src: '../templates/delete_namespace.py.j2'
     dest: "{{ homedir.stdout }}/delete_namespace.py"
